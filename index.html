@@ -59,6 +59,40 @@
 
 <script>
 
+(() => {
+  
+  'use strict';
+
+  const pads = document.querySelectorAll('div.key');
+  
+  function play (key) {
+    const drum = document.querySelector(`audio[data-key='${key}']`);
+    if (!drum) { return; }
+    drum.currentTime = 0;
+    drum.play();
+  }
+
+  function highlight (key) {
+    const pad = document.querySelector(`div.key[data-key='${key}']`);
+    if (!pad) { return; }
+    pad.classList.add('playing');
+  }
+
+  function removeHighlight (e) {
+    if (e.propertyName !== 'transform') { return; }
+    this.classList.remove('playing');
+  }
+
+  function fired (e) {
+    highlight(e.keyCode);
+    play(e.keyCode);
+  }
+
+  pads.forEach(key => key.addEventListener('transitionend', removeHighlight));
+  window.addEventListener('keydown', fired);
+
+})();
+
 </script>
 
 
